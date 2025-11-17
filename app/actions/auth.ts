@@ -4,7 +4,10 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
 
-export async function signIn(formData: FormData) {
+export async function signIn(
+  prevState: { message: string } | null,
+  formData: FormData
+): Promise<{ message: string }> {
   const supabase = await createClient()
 
   const data = {
@@ -15,14 +18,17 @@ export async function signIn(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
-    return { error: error.message }
+    return { message: error.message }
   }
 
   revalidatePath('/', 'layout')
   redirect('/')
 }
 
-export async function signUp(formData: FormData) {
+export async function signUp(
+  prevState: { message: string } | null,
+  formData: FormData
+): Promise<{ message: string }> {
   const supabase = await createClient()
 
   const data = {
@@ -33,7 +39,7 @@ export async function signUp(formData: FormData) {
   const { error } = await supabase.auth.signUp(data)
 
   if (error) {
-    return { error: error.message }
+    return { message: error.message }
   }
 
   revalidatePath('/', 'layout')

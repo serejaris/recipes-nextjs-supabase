@@ -5,7 +5,10 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/utils/supabase/server'
 import type { Recipe } from '@/types/recipe'
 
-export async function createRecipe(formData: FormData) {
+export async function createRecipe(
+  prevState: { message: string } | null,
+  formData: FormData
+): Promise<{ message: string }> {
   const supabase = await createClient()
 
   const {
@@ -26,7 +29,7 @@ export async function createRecipe(formData: FormData) {
   const { error } = await supabase.from('recipes').insert(data)
 
   if (error) {
-    return { error: error.message }
+    return { message: error.message }
   }
 
   revalidatePath('/')

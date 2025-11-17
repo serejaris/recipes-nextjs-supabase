@@ -1,7 +1,21 @@
+'use client'
+
+import { useActionState } from 'react'
 import { signIn, signUp } from '@/app/actions/auth'
 import Link from 'next/link'
 
+const signInInitialState = {
+  message: '',
+}
+
+const signUpInitialState = {
+  message: '',
+}
+
 export default function LoginPage() {
+  const [signInState, signInFormAction, signInPending] = useActionState(signIn, signInInitialState)
+  const [signUpState, signUpFormAction, signUpPending] = useActionState(signUp, signUpInitialState)
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-md">
@@ -11,7 +25,7 @@ export default function LoginPage() {
           </h2>
         </div>
         <div className="space-y-4">
-          <form action={signIn} className="space-y-4">
+          <form action={signInFormAction} className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email
@@ -38,12 +52,22 @@ export default function LoginPage() {
                 placeholder="Пароль"
               />
             </div>
+            {signInState?.message && (
+              <div
+                className="p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm"
+                role="alert"
+                aria-live="polite"
+              >
+                {signInState.message}
+              </div>
+            )}
             <div>
               <button
                 type="submit"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                disabled={signInPending}
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Войти
+                {signInPending ? 'Вход...' : 'Войти'}
               </button>
             </div>
           </form>
@@ -57,7 +81,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <form action={signUp} className="space-y-4">
+          <form action={signUpFormAction} className="space-y-4">
             <div>
               <label htmlFor="signup-email" className="block text-sm font-medium text-gray-700">
                 Email
@@ -84,12 +108,22 @@ export default function LoginPage() {
                 placeholder="Пароль"
               />
             </div>
+            {signUpState?.message && (
+              <div
+                className="p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm"
+                role="alert"
+                aria-live="polite"
+              >
+                {signUpState.message}
+              </div>
+            )}
             <div>
               <button
                 type="submit"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                disabled={signUpPending}
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Зарегистрироваться
+                {signUpPending ? 'Регистрация...' : 'Зарегистрироваться'}
               </button>
             </div>
           </form>
