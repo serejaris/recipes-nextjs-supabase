@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server'
 import { createRecipe } from '@/app/actions/recipes'
 import { Navigation } from '@/app/components/Navigation'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 
 export default async function AddRecipePage() {
   const supabase = await createClient()
@@ -67,12 +68,12 @@ export default async function AddRecipePage() {
             </div>
 
             <div className="flex items-center justify-end space-x-4">
-              <a
+              <Link
                 href="/"
                 className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
               >
                 Отмена
-              </a>
+              </Link>
               <button
                 type="submit"
                 className="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
